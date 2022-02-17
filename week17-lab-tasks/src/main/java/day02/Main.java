@@ -1,5 +1,7 @@
-package day01;
+package day02;
 
+import day01.ActorsRepository;
+import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
@@ -17,10 +19,12 @@ public class Main {
             throw new IllegalStateException("Can't reach database!", sqe);
         }
 
-        ActorsRepository actorsRepository = new ActorsRepository(dataSource);
-        //actorsRepository.saveActor("Jack Doe");
-        System.out.println(actorsRepository.findActorsWithPrefix("Ja"));
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.migrate();
 
+        ActorsRepository actorsRepository = new ActorsRepository(dataSource);
+        actorsRepository.saveActor("Jack Doe");
+        System.out.println(actorsRepository.findActorsWithPrefix("Ja"));
 
     }
 }
