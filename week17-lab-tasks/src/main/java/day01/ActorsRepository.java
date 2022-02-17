@@ -1,6 +1,5 @@
 package day01;
 
-import org.mariadb.jdbc.internal.com.read.resultset.SelectResultSet;
 
 import javax.sql.DataSource;
 import java.sql.*;

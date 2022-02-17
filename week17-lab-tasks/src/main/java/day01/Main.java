@@ -2,9 +2,7 @@ package day01;
 
 import org.mariadb.jdbc.MariaDbDataSource;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
 
