@@ -20,7 +20,10 @@ public class ActivityTrackerMain {
 
         ActivityRepo activityRepo = new ActivityRepo(dataSource);
         //activityRepo.saveActivity(LocalDateTime.of(2022, 02, 11, 10, 11, 11), "Futás", Type.RUNNING);
-        activityRepo.saveActivity(LocalDateTime.of(2022, 01, 21, 8, 33, 22), "Hosszű Futás", Type.RUNNING);
+        //activityRepo.saveActivity(LocalDateTime.of(2022, 01, 21, 8, 33, 22), "Hosszű Futás", Type.RUNNING);
+        activityRepo.saveActivity(LocalDateTime.of(2022, 01, 30, 11, 10, 11), "kosárlabda", Type.BASKETBALL);
+        System.out.println(activityRepo.findAllActivity());
+
 
     }
 }

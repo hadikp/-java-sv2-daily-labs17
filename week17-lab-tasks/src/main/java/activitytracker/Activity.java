@@ -31,4 +31,11 @@ public class Activity {
     public Type getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return  "ID=" + id +
+                ", startTime=" + startTime +
+                ", description=" + description + ", " + type + ";";
+    }
 }

@@ -3,6 +3,8 @@ package activitytracker;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityRepo {
 
@@ -22,6 +24,30 @@ public class ActivityRepo {
         }
         catch (SQLException sqe) {
             throw new IllegalStateException("Cant connection Database!", sqe);
+        }
+    }
+
+    public List<Activity> findAllActivity() {
+        List<Activity> result = new ArrayList<>();
+        try(Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("Select * from activities");
+            ResultSet rs = stmt.executeQuery()) {
+            makeResultset(result, rs);
+        }
+        catch (SQLException sqe) {
+            throw new IllegalStateException("Can't reach database!", sqe);
+        }
+        return result;
+    }
+
+    private void makeResultset(List<Activity> result, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            LocalDateTime startTime = rs.getTimestamp("start_time").toLocalDateTime();
+            String description = rs.getString("description");
+            String typeString = rs.getString("activity_type");
+            Type type = Type.valueOf(typeString);
+            result.add(new Activity(id, startTime, description, type));
         }
     }
 }
