@@ -1,11 +1,11 @@
 package day02;
 
-import day01.ActorsRepository;
 import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
 
@@ -23,12 +23,17 @@ public class Main {
         Flyway flyway = Flyway.configure().dataSource(dataSource).load();
         flyway.migrate();
 
-        ActorsRepository actorsRepository = new ActorsRepository(dataSource);
-        //actorsRepository.saveActor("Jack Doe");
-        //System.out.println(actorsRepository.findActorsWithPrefix("Ja"));
-        MoviesReposotory moviesReposotory = new MoviesReposotory(dataSource);
-        //moviesReposotory.saveMovie("Star Wars", LocalDate.of(1988, 12, 11));
-        System.out.println(moviesReposotory.findAllMovies());
+        ActorsRepo actorsRepo = new ActorsRepo(dataSource);
+        //actorsRepo.saveActor("Jack Doe");
+        //System.out.println(actorsRepo.findActorsWithPrefix("Ja"));
+        MoviesRepo moviesRepo = new MoviesRepo(dataSource);
+                //moviesRepo.saveMovie("Star Wars", LocalDate.of(1988, 12, 11));
+        System.out.println(actorsRepo.findActorByName("John Doe"));
+
+        ActorsMoviesRepo actorsMoviesRepo = new ActorsMoviesRepo(dataSource);
+        ActorsMoviesService service = new ActorsMoviesService(actorsRepo, moviesRepo, actorsMoviesRepo);
+        //service.insertMovieWithActors("Titanic", LocalDate.of(1999, 01, 12), List.of("Leonardo", "Kate"));
+        service.insertMovieWithActors("Terminátor", LocalDate.of(2001, 12, 21), List.of("Schwarcenegger", "Linda Hamilton"));
 
 
     }

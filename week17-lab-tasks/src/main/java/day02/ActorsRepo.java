@@ -1,12 +1,10 @@
 package day02;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ActorsRepo {
 
@@ -16,11 +14,18 @@ public class ActorsRepo {
         this.dataSource = dataSource;
     }
 
-    public void saveActor(String name) {
+    public Long saveActor(String name) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement("Insert into actors(actor_name) values (?)")){
+             PreparedStatement stmt = connection.prepareStatement("Insert into actors(actor_name) values (?)", Statement.RETURN_GENERATED_KEYS)){
             stmt.setString(1, name);
             stmt.executeUpdate();
+
+            try(ResultSet rs = stmt.getGeneratedKeys()) {
+                if(rs.next()){
+                    return rs.getLong(1);
+                }
+                throw new IllegalStateException("Insert failed to movies!");
+            }
 
         }
         catch (SQLException sqe) {
@@ -45,5 +50,28 @@ public class ActorsRepo {
             throw new IllegalStateException("Can't query!", sqe);
         }
         return result;
+    }
+
+    public Optional<Actor> findActorByName(String name) {
+        try(Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("Select * from actors Where actor_name = ?")){
+            stmt.setString(1, name);
+            return makeSelect(stmt);
+        }
+        catch (SQLException sqe) {
+            throw new IllegalStateException("Can't query!", sqe);
+        }
+    }
+
+    private Optional<Actor> makeSelect(PreparedStatement stmt) throws SQLException {
+        try(ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String actorName = rs.getString("actor_name");
+                return Optional.of(new Actor(id, actorName));
+            }
+        }
+        //throw new IllegalArgumentException("Don't find actor!");
+        return Optional.empty();
     }
 }
