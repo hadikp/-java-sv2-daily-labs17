@@ -29,18 +29,24 @@ public class Main {
         //actorsRepo.saveActor("Jack Doe");
         //System.out.println(actorsRepo.findActorsWithPrefix("Ja"));
         MoviesRepo moviesRepo = new MoviesRepo(dataSource);
-        System.out.println(actorsRepo.findActorByName("John Doe"));
+        //System.out.println(actorsRepo.findActorByName("John Doe"));
 
         ActorsMoviesRepo actorsMoviesRepo = new ActorsMoviesRepo(dataSource);
         RatingsRepo ratingsRepo = new RatingsRepo(dataSource);
 
         ActorsMoviesService service = new ActorsMoviesService(actorsRepo, moviesRepo, actorsMoviesRepo);
         MoviesRatingService moviesRatingService = new MoviesRatingService(moviesRepo, ratingsRepo);
-        service.insertMovieWithActors("Titanic", LocalDate.of(1999, 01, 12), List.of("Leonardo", "Kate"));
+        /*service.insertMovieWithActors("Titanic", LocalDate.of(1999, 01, 12), List.of("Leonardo", "Kate"));
         service.insertMovieWithActors("Terminátor", LocalDate.of(2001, 12, 21), List.of("Schwarcenegger", "Linda Hamilton"));
 
-        //moviesRatingService.addRatings("Titanic", 2, 3, 4);
-        moviesRatingService.addRatings("Terminátor", 2, 3, 4);
+        moviesRatingService.addRatings("Titanic", 1, 5, 3);
+        moviesRatingService.addRatings("Terminátor", 4, 5);*/
+
+        moviesRatingService.addAverageRating("Terminátor");
+
+        //System.out.println(ratingsRepo.findRatingsByMovie("Terminátor"));
+
+
 
     }
 }

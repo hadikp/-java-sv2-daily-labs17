@@ -21,4 +21,9 @@ public class MoviesRatingService {
             throw new IllegalArgumentException("Cannot find movie: " + title);
         }
     }
+
+    public void addAverageRating(String title) {
+        MovieWithRatings mwr = ratingsRepo.findRatingsByMovie(title);
+        ratingsRepo.insertAverageRating(mwr);
+    }
 }

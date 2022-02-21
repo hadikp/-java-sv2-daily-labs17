@@ -1,0 +1,1 @@
+alter table movies add column average_rate double default null;
